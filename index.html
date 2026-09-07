@@ -16,7 +16,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <style>
 :root{
@@ -467,7 +466,7 @@ a{color:inherit;}
   width:200px;aspect-ratio:3/4;
 }
 
-/* シンボル情報（Key Elements）：小項目名をモノクロ・上品トーンに */
+/* シンボル情報（Key Elements）：小項目名はモノクロ・上品トーンに */
 .esheet-symbols{
   margin-top:16px;
   display:flex;
@@ -569,11 +568,6 @@ a{color:inherit;}
   border-left:4px solid var(--accent-purple);
 }
 
-/* ---------- Google panel ---------- */
-.gstatus{display:flex;align-items:center;gap:8px;font-size:.82rem;}
-.gdot{width:9px;height:9px;border-radius:50%;background:var(--ink-faint);}
-.gdot.on{background:var(--ok);box-shadow:0 0 6px var(--ok);}
-
 /* ---------- Responsive ---------- */
 @media (max-width: 900px){
   .home-grid{grid-template-columns:1fr;}
@@ -615,7 +609,7 @@ a{color:inherit;}
     <button data-go="home">✦ HOME</button>
     <button data-go="list">✦ ROSTER</button>
     <button data-go="diagram">✦ NEXUS DIAGRAM</button>
-    <button id="nav-google-btn">✦ CLOUD SYNC</button>
+    <button id="nav-backup-btn">✦ DATA BACKUP</button>
   </nav>
 </header>
 
@@ -652,8 +646,8 @@ a{color:inherit;}
     <div><b id="stat-rel">0</b><br>設定済み関係リンク</div>
   </div>
   <div class="home-footer-row">
-    <span>✦ データは端末ブラウザ（LocalStorage）に即時保存されます。</span>
-    <span class="gstatus"><span class="gdot" id="home-gdot"></span><span id="home-gtext">Google未連携</span></span>
+    <span>✦ データは端末ブラウザに保存されます。他端末への移行は「DATA BACKUP」をご利用ください。</span>
+    <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--accent-purple);">✦ STANDALONE READY</span>
   </div>
 </main>
 
@@ -961,25 +955,26 @@ a{color:inherit;}
   </div>
 </div>
 
-<div class="modal-overlay hidden" id="modal-google">
+<!-- データ管理 / バックアップ・復元モーダル -->
+<div class="modal-overlay hidden" id="modal-backup">
   <div class="modal-box" style="position:relative;">
-    <button class="modal-close" onclick="closeModal('modal-google')">✕</button>
-    <h3>✦ Google Drive 自動同期設定</h3>
+    <button class="modal-close" onclick="closeModal('modal-backup')">✕</button>
+    <h3>✦ データ管理・バックアップ</h3>
     <p style="font-size:.85rem;color:var(--ink-soft);line-height:1.7;">
-      Google Cloud Console で発行した OAuth クライアントID を設定すると、Google ドライブへデータを自動バックアップ可能です。
+      全キャラクター・三面図・関係図データを1つのファイルとして書き出します。PCやスマートフォンなどの別端末へファイルを送ることで、データをそのまま引き継いで編集できます。
     </p>
-    <div class="form-row">
-      <label>Google OAuth Client ID</label>
-      <input type="text" id="g-client-id" placeholder="xxxxxxxx.apps.googleusercontent.com">
+
+    <div style="border:1px solid var(--rule);padding:14px;border-radius:var(--radius);background:var(--paper-alt);margin:16px 0;">
+      <div style="font-weight:700;font-size:.88rem;margin-bottom:6px;">1. データをファイルに書き出す</div>
+      <p style="font-size:.78rem;color:var(--ink-faint);margin:0 0 10px;">現在の全データを <code>.json</code> ファイルとして端末へ保存します。</p>
+      <button class="btn btn-primary btn-sm" onclick="exportBackupFile()">✦ バックアップを書き出す (ダウンロード)</button>
     </div>
-    <div style="display:flex;gap:10px;margin-bottom:14px;">
-      <button class="btn btn-sm" onclick="saveGoogleClientId()">IDを保存</button>
-      <button class="btn btn-primary btn-sm" id="g-connect-btn" onclick="connectGoogle()">✦ Googleに接続</button>
-    </div>
-    <div class="gstatus"><span class="gdot" id="modal-gdot"></span><span id="modal-gtext">未接続</span></div>
-    <div style="margin-top:16px;display:flex;gap:8px;">
-      <button class="btn btn-ghost btn-sm" onclick="manualSaveToDrive()">今すぐクラウドへ保存</button>
-      <button class="btn btn-ghost btn-sm" onclick="manualLoadFromDrive()">クラウドから復元</button>
+
+    <div style="border:1px solid var(--rule);padding:14px;border-radius:var(--radius);background:var(--paper-alt);">
+      <div style="font-weight:700;font-size:.88rem;margin-bottom:6px;">2. ファイルからデータを読み込む</div>
+      <p style="font-size:.78rem;color:var(--ink-faint);margin:0 0 10px;">保存したバックアップファイルを選択して現在の画面に復元します。</p>
+      <input type="file" id="import-file-input" accept=".json" class="hidden" onchange="onBackupFileChosen(event)">
+      <button class="btn btn-sm" onclick="triggerImportFile()">✦ バックアップから読み込む (復元)</button>
     </div>
   </div>
 </div>
@@ -1018,14 +1013,13 @@ function loadStore(){
     const raw=localStorage.getItem(STORE_KEY) || localStorage.getItem('jinbutsu_meikan_data_v1');
     if(raw) return JSON.parse(raw);
   }catch(e){console.warn(e);}
-  return {characters:[], relations:[], nodePositions:{}, googleClientId:'', driveFileId:''};
+  return {characters:[], relations:[], nodePositions:{}};
 }
 let DATA = loadStore();
 
 function persist(){
   localStorage.setItem(STORE_KEY, JSON.stringify(DATA));
   updateHomeStats();
-  scheduleDriveAutosave();
 }
 
 /* ---------- Routing ---------- */
@@ -1047,10 +1041,8 @@ function showScreen(name){
 document.querySelectorAll('#topnav button[data-go]').forEach(b=>{
   b.addEventListener('click', ()=>showScreen(b.dataset.go));
 });
-document.getElementById('nav-google-btn').addEventListener('click', ()=>{
-  document.getElementById('g-client-id').value = DATA.googleClientId||'';
-  openModal('modal-google');
-  refreshGoogleStatusUI();
+document.getElementById('nav-backup-btn').addEventListener('click', ()=>{
+  openModal('modal-backup');
 });
 
 function updateHomeStats(){
@@ -1066,6 +1058,54 @@ function updateHomeStats(){
 
 function openModal(id){document.getElementById(id).classList.remove('hidden');}
 function closeModal(id){document.getElementById(id).classList.add('hidden');}
+
+/* =========================================================
+   BACKUP & RESTORE (選択肢B: ファイル保存・復元)
+   ========================================================= */
+function exportBackupFile(){
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
+  const json = JSON.stringify(DATA, null, 2);
+  const blob = new Blob([json], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `persona_archive_${dateStr}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('バックアップファイルを書き出しました');
+}
+
+function triggerImportFile(){
+  document.getElementById('import-file-input').value = '';
+  document.getElementById('import-file-input').click();
+}
+
+function onBackupFileChosen(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    try {
+      const imported = JSON.parse(evt.target.result);
+      if(!imported || !Array.isArray(imported.characters) || !Array.isArray(imported.relations)){
+        throw new Error('無効なデータ形式です');
+      }
+      if(confirm(`バックアップデータ（登録キャラクター: ${imported.characters.length}件）を読み込みますか？\n※現在のデータは上書きされます。`)){
+        DATA = imported;
+        persist();
+        updateHomeStats();
+        if(currentScreen==='list') renderCharList();
+        if(currentScreen==='diagram') renderDiagram();
+        closeModal('modal-backup');
+        toast('データを復元しました');
+      }
+    } catch(err) {
+      alert('ファイルの読み込みに失敗しました。正しいJSONファイルか確認してください。');
+    }
+  };
+  reader.readAsText(file);
+}
 
 /* =========================================================
    CHARACTER LIST
@@ -1619,12 +1659,10 @@ function renderDiagram(){
     const ux = dx / dist;
     const uy = dy / dist;
 
-    // 対向する逆向きの関係が存在するか確認
     const hasOpposite = DATA.relations.some(other =>
       other.id !== r.id && other.from === r.to && other.to === r.from
     );
 
-    // お互いに進行方向の右側に18pxずつオフセットして車線を分ける
     const offsetDist = hasOpposite ? 18 : 0;
     const nx = -uy * offsetDist;
     const ny = ux * offsetDist;
@@ -2008,89 +2046,6 @@ async function exportAsPdf(){
   }
   pdf.save((editingChar.name||'persona-archive')+'.pdf');
 }
-
-/* =========================================================
-   GOOGLE DRIVE SYNC
-   ========================================================= */
-let gTokenClient=null, gAccessToken=null;
-function refreshGoogleStatusUI(){
-  const on = !!gAccessToken;
-  document.getElementById('modal-gdot').classList.toggle('on',on);
-  document.getElementById('modal-gtext').textContent = on? '接続済み — 自動同期中' : '未接続';
-  document.getElementById('home-gdot').classList.toggle('on',on);
-  document.getElementById('home-gtext').textContent = on? 'Google同期中' : 'Google未連携';
-}
-function saveGoogleClientId(){
-  DATA.googleClientId = document.getElementById('g-client-id').value.trim();
-  persist();
-  toast('クライアントIDを保存しました');
-}
-function connectGoogle(){
-  const clientId = DATA.googleClientId || document.getElementById('g-client-id').value.trim();
-  if(!clientId){ toast('先にクライアントIDを入力してください'); return; }
-  if(typeof google === 'undefined' || !google.accounts){ toast('Googleライブラリの読み込みに失敗しました'); return; }
-  gTokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: clientId,
-    scope: 'https://www.googleapis.com/auth/drive.appdata',
-    callback: (resp)=>{
-      if(resp.error){ toast('接続に失敗しました'); return; }
-      gAccessToken = resp.access_token;
-      refreshGoogleStatusUI();
-      toast('Googleに接続しました');
-    }
-  });
-  gTokenClient.requestAccessToken();
-}
-async function driveFindOrCreateFile(){
-  const headers = { Authorization:'Bearer '+gAccessToken };
-  if(DATA.driveFileId){ return DATA.driveFileId; }
-  const q = await fetch('https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name%3D%27persona-archive-data.json%27', {headers});
-  const qd = await q.json();
-  if(qd.files && qd.files.length){ DATA.driveFileId = qd.files[0].id; return DATA.driveFileId; }
-  const createRes = await fetch('https://www.googleapis.com/drive/v3/files', {
-    method:'POST', headers:{...headers,'Content-Type':'application/json'},
-    body: JSON.stringify({name:'persona-archive-data.json', parents:['appDataFolder']})
-  });
-  const created = await createRes.json();
-  DATA.driveFileId = created.id;
-  return DATA.driveFileId;
-}
-async function manualSaveToDrive(){
-  if(!gAccessToken){ toast('先にGoogleへ接続してください'); return; }
-  try{
-    const fileId = await driveFindOrCreateFile();
-    await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, {
-      method:'PATCH',
-      headers:{ Authorization:'Bearer '+gAccessToken, 'Content-Type':'application/json' },
-      body: JSON.stringify(DATA)
-    });
-    localStorage.setItem(STORE_KEY, JSON.stringify(DATA));
-    toast('Googleドライブへ保存しました');
-  }catch(e){ console.error(e); toast('保存に失敗しました'); }
-}
-async function manualLoadFromDrive(){
-  if(!gAccessToken){ toast('先にGoogleへ接続してください'); return; }
-  try{
-    const fileId = await driveFindOrCreateFile();
-    const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
-      headers:{ Authorization:'Bearer '+gAccessToken }
-    });
-    const text = await res.text();
-    if(!text){ toast('クラウドにデータが見つかりませんでした'); return; }
-    const remote = JSON.parse(text);
-    if(confirm('クラウド上のデータで現在の内容を上書き復元しますか？')){
-      DATA = remote;
-      localStorage.setItem(STORE_KEY, JSON.stringify(DATA));
-      toast('復元が完了しました');
-      updateHomeStats();
-      if(currentScreen==='list') renderCharList();
-      if(currentScreen==='diagram') renderDiagram();
-    }
-  }catch(e){ console.error(e); toast('復元に失敗しました'); }
-}
-const scheduleDriveAutosave = debounce(()=>{
-  if(gAccessToken) manualSaveToDrive();
-}, 2500);
 
 /* =========================================================
    INIT
