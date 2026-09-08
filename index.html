@@ -35,6 +35,11 @@
   --accent-indigo: #4F46E5;
   --accent-cyan: #0284C7;
 
+  /* ゴールドアクセント */
+  --gold: #C5A059;
+  --gold-light: #E5C07B;
+  --gold-glow: rgba(197, 160, 89, 0.22);
+
   /* メインアクセント & グラデーション */
   --accent: #6366F1;
   --accent-gradient: linear-gradient(135deg, #2563EB 0%, #4F46E5 50%, #7C3AED 100%);
@@ -114,6 +119,103 @@ a{color:inherit;}
 .btn-sm{padding:5px 12px;font-size:.74rem;}
 .btn-icon{padding:6px;border-radius:var(--radius-s);width:32px;height:32px;justify-content:center;}
 .btn[disabled]{opacity:.45;cursor:not-allowed;transform:none !important;}
+
+/* ---------- 左側 Codex Cosmographia 引き出し型リンクウィジェット ---------- */
+.codex-drawer {
+  position: fixed;
+  left: 0;
+  top: 210px;
+  z-index: 95;
+  display: flex;
+  align-items: stretch;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1.2px solid var(--gold);
+  border-left: none;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08), 0 0 10px var(--gold-glow);
+  text-decoration: none;
+  /* 通常時はタブ（約38px）だけ画面端に残して本体を隠す */
+  transform: translateX(calc(-100% + 38px));
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+.codex-drawer:hover {
+  transform: translateX(0);
+  box-shadow: 0 8px 28px rgba(37, 99, 235, 0.15), 0 0 18px var(--gold-glow);
+}
+.codex-drawer-content {
+  padding: 12px 14px 12px 18px;
+  width: 235px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.codex-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-display);
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--accent-blue);
+}
+.codex-drawer-head .star {
+  color: var(--gold);
+  font-size: 0.85rem;
+  margin-right: 4px;
+}
+.codex-drawer-head .arrow {
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  transition: transform 0.15s;
+}
+.codex-drawer:hover .codex-drawer-head .arrow {
+  transform: translate(2px, -2px);
+}
+.codex-drawer-desc {
+  font-size: 0.74rem;
+  color: var(--ink-soft);
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+}
+.codex-drawer-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--accent-indigo);
+  border-top: 1px dashed rgba(197, 160, 89, 0.45);
+  padding-top: 4px;
+  margin-top: 4px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.codex-drawer-tab {
+  width: 38px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-left: 2px solid var(--accent-blue);
+  cursor: pointer;
+  user-select: none;
+  padding: 8px 0;
+}
+.codex-drawer-tab .tab-star {
+  color: var(--gold);
+  font-size: 0.85rem;
+}
+.codex-drawer-tab .tab-text {
+  writing-mode: vertical-rl;
+  font-family: var(--font-display);
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  color: var(--accent-blue);
+  font-weight: 700;
+}
 
 /* ---------- Masthead ---------- */
 .masthead{max-width:var(--maxw);margin:0 auto;padding:24px 28px 0;}
@@ -575,6 +677,20 @@ a{color:inherit;}
   #export-sheet{width:100%;min-width:unset;padding:28px 20px 32px;}
   .esheet-head-flex{flex-direction:column;align-items:flex-start;}
   .esheet-grid{grid-template-columns:repeat(2,1fr);}
+  .codex-drawer{
+    position:static;
+    width:auto;
+    transform:none;
+    margin:14px 28px 0;
+    border-left: 1.2px solid var(--gold);
+    border-radius: var(--radius);
+  }
+  .codex-drawer:hover{
+    transform:none;
+  }
+  .codex-drawer-tab{
+    display:none;
+  }
 }
 @media (max-width: 560px){
   .masthead{padding:16px 16px 0;}
@@ -582,10 +698,29 @@ a{color:inherit;}
   .masthead-title h1{font-size:1.8rem;}
   .diagram-toolbar{flex-direction:column;align-items:stretch;}
   .esheet-grid{grid-template-columns:1fr;}
+  .codex-drawer{
+    margin:10px 16px 0;
+  }
 }
 </style>
 </head>
 <body>
+
+<!-- 画面左側・上寄りに常駐する引き出し型連携ボタン -->
+<a href="https://c2mura.github.io/codex-cosmographia/" target="_blank" rel="noopener noreferrer" class="codex-drawer" title="世界観設定まとめ・時系列作成ツール（別タブで開く）">
+  <div class="codex-drawer-content">
+    <div class="codex-drawer-head">
+      <span><span class="star">✦</span>COSMOGRAPHIA</span>
+      <span class="arrow">↗</span>
+    </div>
+    <div class="codex-drawer-desc">世界観設定まとめ・時系列作成</div>
+    <div class="codex-drawer-badge">Chronology &amp; Lore Registry</div>
+  </div>
+  <div class="codex-drawer-tab">
+    <span class="tab-star">✦</span>
+    <span class="tab-text">LORE</span>
+  </div>
+</a>
 
 <header class="masthead">
   <hr class="mh-rule-thick">
@@ -1060,7 +1195,7 @@ function openModal(id){document.getElementById(id).classList.remove('hidden');}
 function closeModal(id){document.getElementById(id).classList.add('hidden');}
 
 /* =========================================================
-   BACKUP & RESTORE (選択肢B: ファイル保存・復元)
+   BACKUP & RESTORE
    ========================================================= */
 function exportBackupFile(){
   const now = new Date();
@@ -1844,7 +1979,7 @@ function deleteRelationFromModal(){
 }
 
 /* =========================================================
-   EXPORT (シンボル情報モノクロ化・未設定カラー対応・リセット)
+   EXPORT
    ========================================================= */
 function openExport(){
   saveCharacter(false);
