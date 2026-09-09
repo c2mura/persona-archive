@@ -6,7 +6,7 @@
 <title>PERSONA ARCHIVE | Character Registry</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=DotGothic16&family=IBM+Plex+Mono:wght@400;500;600;700&family=Kaisei+Tokumin:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Reggae+One&family=Shippori+Mincho:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=DotGothic16&family=IBM+Plex+Mono:wght@400;500;600;700&family=Kaisei+Tokumin:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Shippori+Mincho:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
@@ -69,6 +69,125 @@ button{font-family:inherit;}
 a{color:inherit;}
 .hidden{display:none !important;}
 ::selection{background:var(--accent-glow);color:var(--accent-purple);}
+
+/* ---------- Codex Cosmographia 外部リンクバナー ---------- */
+.codex-nav-banner {
+  position: fixed;
+  left: 0;
+  top: 45%;
+  transform: translateY(-50%);
+  z-index: 95;
+}
+.codex-nav-link {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, #071329 0%, #0D2149 100%);
+  border: 1.5px solid #D4AF37;
+  border-left: none;
+  border-radius: 0 32px 32px 0;
+  padding: 6px 12px 6px 6px;
+  color: #FFFFFF;
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgba(7, 19, 41, 0.45), 0 0 14px rgba(212, 175, 55, 0.25);
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+.codex-nav-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.2px solid #D4AF37;
+  background: radial-gradient(circle, #1E40AF 0%, #071329 80%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #F6E05E;
+  font-size: 1.05rem;
+  box-shadow: inset 0 0 6px rgba(212, 175, 55, 0.4);
+  transition: transform 0.4s ease, border-color 0.3s ease;
+}
+.codex-nav-text {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, padding 0.35s ease;
+  padding-left: 0;
+}
+.codex-nav-link:hover {
+  background: linear-gradient(135deg, #0A1B38 0%, #153268 100%);
+  border-color: #F6E05E;
+  box-shadow: 0 8px 24px rgba(7, 19, 41, 0.6), 0 0 22px rgba(212, 175, 55, 0.45);
+  padding-right: 18px;
+}
+.codex-nav-link:hover .codex-nav-icon {
+  transform: rotate(90deg) scale(1.05);
+  border-color: #FFFFFF;
+  color: #FFFFFF;
+}
+.codex-nav-link:hover .codex-nav-text {
+  max-width: 280px;
+  opacity: 1;
+  padding-left: 10px;
+}
+.codex-nav-tag {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: #D4AF37;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.codex-nav-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 800;
+  font-size: 0.88rem;
+  letter-spacing: 0.08em;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+.codex-nav-desc {
+  font-size: 0.72rem;
+  color: #BAE6FD;
+  font-family: var(--font-body);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  margin-top: 1px;
+}
+
+@media (max-width: 768px) {
+  .codex-nav-banner {
+    position: static;
+    transform: none;
+    width: 100%;
+  }
+  .codex-nav-link {
+    display: flex;
+    width: 100%;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 1.5px solid #D4AF37;
+    padding: 8px 14px;
+    justify-content: center;
+    gap: 10px;
+  }
+  .codex-nav-text {
+    max-width: none;
+    opacity: 1;
+    overflow: visible;
+    padding-left: 0;
+  }
+  .codex-nav-link:hover {
+    padding-right: 14px;
+  }
+}
 
 /* ---------- Buttons ---------- */
 .btn{
@@ -503,7 +622,7 @@ a{color:inherit;}
 .dnode .circ img{width:100%;height:100%;object-fit:cover;}
 .dnode .circ .ph{display:flex;align-items:center;justify-content:center;height:100%;font-family:var(--font-mono);color:var(--accent-blue);}
 .dnode .nlabel{
-  font-size:.74rem;font-weight:700;margin-top:5px;background:rgba(255,255,255,.94);
+  font-size:.74rem;font-weight:700;margin-top:5px;background:rgba(255,255,249);
   border:1px solid var(--rule-light);border-radius:3px;padding:1px 6px;display:inline-block;
 }
 .relation-list{margin-top:20px;border-top:1px solid var(--rule);padding-top:14px;}
@@ -692,17 +811,22 @@ a{color:inherit;}
 }
 .esheet-meta-right{text-align:right;white-space:nowrap;}
 
-/* ヘッダー全体フレックス */
+/* ヘッダー全体フレックス（写真下端と高さを揃えてストレッチ） */
 .esheet-head-flex{
   display:flex;
   justify-content:space-between;
-  align-items:flex-start;
+  align-items:stretch !important;
   gap:20px;
   margin-top:6px;
   margin-bottom:14px;
   flex-shrink:0;
 }
-.esheet-head-text{flex:1;padding-top:4px;}
+.esheet-head-text{
+  flex:1;
+  padding-top:4px;
+  display:flex !important;
+  flex-direction:column !important;
+}
 
 .esheet-reading{
   font-family:inherit;
@@ -711,7 +835,14 @@ a{color:inherit;}
   margin-bottom:3px;
   font-weight:600;
 }
-.esheet-name{font-family:inherit;font-weight:900;font-size:2.2em;line-height:1.15;margin:0 0 5px;letter-spacing:.02em;}
+.esheet-name{
+  font-family:inherit;
+  font-weight:900;
+  font-size:2.2em;
+  line-height:1.15;
+  margin:0 0 5px 0 !important;
+  letter-spacing:.02em;
+}
 .esheet-sub{font-family:var(--font-mono);font-size:.74em;opacity:.7;letter-spacing:.1em;text-transform:uppercase;}
 
 /* プロフィール写真 */
@@ -725,46 +856,70 @@ a{color:inherit;}
   aspect-ratio:3/4;
 }
 
-/* シンボル情報 */
+/* =========================================================
+   シンボル情報（シンプルスタイル復帰＆固定フォントサイズ）
+   ========================================================= */
 .esheet-symbols{
-  margin-top:10px;
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-  font-size:.83em;
-  color:var(--ink-soft);
-  opacity:.88;
-  line-height:1.5;
+  margin-top: 10px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
 }
 .esheet-sym-row{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  flex-wrap:wrap;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  line-height: 1.45 !important;
 }
 .esheet-sym-star{
-  font-size:.78em;
-  color:var(--ink-soft);
-  opacity:.65;
+  font-size: 10px !important;
+  color: var(--ink-faint) !important;
+  opacity: 0.65 !important;
+  line-height: 1 !important;
 }
 .esheet-sym-label{
-  font-family:var(--font-mono);
-  font-weight:700;
-  letter-spacing:.06em;
-  font-size:.84em;
-  color:var(--ink-soft);
+  font-family: 'IBM Plex Mono', monospace !important;
+  font-weight: 700 !important;
+  font-size: 11px !important; /* スライダーによる変動を受けない絶対サイズ */
+  letter-spacing: 0.08em !important;
+  color: var(--ink-faint) !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
 }
 .esheet-sym-val{
-  font-weight:500;
+  font-family: var(--font-body) !important;
+  font-size: 13px !important; /* スライダーに左右されない安定サイズ */
+  font-weight: 600 !important;
+  color: var(--ink-soft) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
 }
-.esheet-color-swatch{
-  display:inline-block;
-  width:13px;
-  height:13px;
-  border-radius:50%;
-  border:1px solid rgba(0,0,0,.25);
-  vertical-align:middle;
-  margin-right:5px;
+
+/* =========================================================
+   キャラ絵文字プレート（サイズアップ＆テーマカラー2連動アクセント）
+   ========================================================= */
+.esheet-emoji-bottom-wrap {
+  margin-top: auto !important; /* 一番下（グラデーション横棒の直上）まで押し出し */
+  padding-top: 10px !important;
+  display: flex !important;
+  align-items: flex-end !important;
+}
+.esheet-char-emoji-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 2.4em !important; /* 大きめにサイズアップ */
+  line-height: 1 !important;
+  padding: 6px 14px 6px 12px !important;
+  background: #FFFFFF !important;
+  border: 1px solid rgba(15, 23, 42, 0.2) !important;
+  border-left: 4px solid var(--accent-purple) !important;
+  border-radius: 2px !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
 }
 
 .esheet-section{margin-bottom:16px;}
@@ -984,6 +1139,18 @@ a{color:inherit;}
 </head>
 <body>
 
+<!-- CODEX COSMOGRAPHIA 展開式リンクバナー -->
+<aside class="codex-nav-banner" aria-label="Codex Cosmographia Navigation">
+  <a href="https://c2mura.github.io/codex-cosmographia/" target="_blank" rel="noopener noreferrer" class="codex-nav-link" title="CODEX COSMOGRAPHIA を開く">
+    <div class="codex-nav-icon">✦</div>
+    <div class="codex-nav-text">
+      <div class="codex-nav-tag">COSMOGRAPHY NEXUS ↗</div>
+      <div class="codex-nav-title">CODEX COSMOGRAPHIA</div>
+      <div class="codex-nav-desc">世界観まとめ・時系列作成</div>
+    </div>
+  </a>
+</aside>
+
 <header class="masthead">
   <hr class="mh-rule-thick">
   <div class="mh-metarow">
@@ -1079,16 +1246,20 @@ a{color:inherit;}
     </div>
   </div>
 
-  <!-- シンボル情報編集パネル -->
+  <!-- シンボル情報編集パネル（例: 🐺） -->
   <div class="panel" style="margin-bottom:20px;">
     <div class="panel-title">
       <span><span class="sec-badge">[ KEY ]</span>KEY ELEMENTS // シンボル情報</span>
-      <small>モチーフ・テーマソング・カラー</small>
+      <small>キャラ絵文字・モチーフ・テーマソング・カラー</small>
     </div>
     <div class="symbol-grid">
       <div class="field-block" style="margin-bottom:0;">
-        <label>✦ Motif / モチーフ（絵文字可）</label>
-        <input class="input-sm" id="f-motif" placeholder="例: 曼珠沙華 🪶 / 濡れ羽" oninput="markDirty()">
+        <label>✦ Character Emoji / キャラ絵文字（SNS用）</label>
+        <input class="input-sm" id="f-emoji" placeholder="例: 🐺 / 💉🩸" oninput="markDirty()">
+      </div>
+      <div class="field-block" style="margin-bottom:0;">
+        <label>✦ Motif / モチーフ</label>
+        <input class="input-sm" id="f-motif" placeholder="例: 曼珠沙華 / 濡れ羽" oninput="markDirty()">
       </div>
       <div class="field-block" style="margin-bottom:0;">
         <label>✦ Theme Song / テーマソング</label>
@@ -1239,7 +1410,6 @@ a{color:inherit;}
         <option value="'Noto Sans JP', sans-serif">Noto Sans JP (標準ゴシック)</option>
         <option value="'BIZ UDPGothic', sans-serif">BIZ UDPゴシック (高視認性UD)</option>
         <option value="'Kaisei Tokumin', 'Shippori Mincho', serif">解星 特民 (活版・大正モダン明朝)</option>
-        <option value="'Reggae One', 'Noto Sans JP', sans-serif">Reggae One (直線POP・アクション調)</option>
         <option value="'DotGothic16', monospace">DotGothic16 (8bit レトロゲーム調)</option>
         <option value="'IBM Plex Mono', 'Noto Sans JP', monospace">IBM Plex Mono (等幅・機密記録調)</option>
       </select>
@@ -1265,7 +1435,7 @@ a{color:inherit;}
       <input type="color" id="exp-color-accent1" value="#2563EB" oninput="renderExportSheet()">
     </div>
     <div class="form-row">
-      <label>テーマカラー2 (番号・小項目)</label>
+      <label>テーマカラー2 (番号・小項目・アクセント)</label>
       <input type="color" id="exp-color-accent2" value="#7C3AED" oninput="renderExportSheet()">
     </div>
   </div>
@@ -1480,6 +1650,92 @@ function toast(msg){
   setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);},2200);
 }
 
+/* ---------- 絵文字ラスタライズエンジン（結合絵文字分解防止用） ---------- */
+const emojiImageCache = new Map();
+
+function createEmojiImgElement(emojiStr) {
+  let dataUrl = emojiImageCache.get(emojiStr);
+  if (!dataUrl) {
+    const canvas = document.createElement('canvas');
+    const size = 128;
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, size, size);
+    ctx.font = '84px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(emojiStr, size / 2, size / 2 + 4);
+    dataUrl = canvas.toDataURL('image/png');
+    emojiImageCache.set(emojiStr, dataUrl);
+  }
+
+  const img = document.createElement('img');
+  img.src = dataUrl;
+  img.alt = emojiStr;
+  img.className = 'rendered-emoji';
+  img.style.height = '1em';
+  img.style.width = '1em';
+  img.style.display = 'inline-block';
+  img.style.verticalAlign = 'middle';
+  img.style.margin = '0 1px';
+  img.style.objectFit = 'contain';
+  return img;
+}
+
+function replaceCompoundEmojisWithImages(rootEl) {
+  const walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  let node;
+  while ((node = walker.nextNode())) {
+    const p = node.parentElement;
+    if (p && (p.tagName === 'SCRIPT' || p.tagName === 'STYLE' || p.classList.contains('censor-mask'))) {
+      continue;
+    }
+    if (node.nodeValue && node.nodeValue.includes('\u200D')) {
+      textNodes.push(node);
+    }
+  }
+
+  if (textNodes.length === 0) return;
+
+  const hasSegmenter = typeof Intl !== 'undefined' && typeof Intl.Segmenter === 'function';
+  const segmenter = hasSegmenter ? new Intl.Segmenter('ja', { granularity: 'grapheme' }) : null;
+  const fallbackRegex = /(\S*?\u200D\S+?)/g;
+
+  textNodes.forEach(textNode => {
+    const text = textNode.nodeValue;
+    const fragment = document.createDocumentFragment();
+
+    if (segmenter) {
+      for (const { segment } of segmenter.segment(text)) {
+        if (segment.includes('\u200D')) {
+          fragment.appendChild(createEmojiImgElement(segment));
+        } else {
+          fragment.appendChild(document.createTextNode(segment));
+        }
+      }
+    } else {
+      let lastIdx = 0;
+      let m;
+      while ((m = fallbackRegex.exec(text)) !== null) {
+        if (m.index > lastIdx) {
+          fragment.appendChild(document.createTextNode(text.substring(lastIdx, m.index)));
+        }
+        fragment.appendChild(createEmojiImgElement(m[0]));
+        lastIdx = m.index + m[0].length;
+      }
+      if (lastIdx < text.length) {
+        fragment.appendChild(document.createTextNode(text.substring(lastIdx)));
+      }
+    }
+
+    if (textNode.parentNode) {
+      textNode.parentNode.replaceChild(fragment, textNode);
+    }
+  });
+}
+
 /* ---------- Storage ---------- */
 const STORE_KEY='persona_archive_data_v2';
 function loadStore(){
@@ -1599,7 +1855,7 @@ function renderCharList(){
       <div class="char-thumb">${c.profileImage?`<img src="${c.profileImage}">`:'<span class="ph">✦</span>'}</div>
       <div class="char-card-body">
         <div class="cread">${escapeHtml(c.reading||'')}</div>
-        <div class="cname">${escapeHtml(c.name||'(NAMELESS)')}</div>
+        <div class="cname">${escapeHtml(c.name||'(NAMELESS)')} ${c.emoji ? `<span style="font-size:0.9em;vertical-align:baseline;">${escapeHtml(c.emoji)}</span>` : ''}</div>
       </div>
       <div class="char-card-del" title="削除">✕</div>`;
     card.querySelector('.char-card-del').addEventListener('click',(e)=>{
@@ -1625,7 +1881,7 @@ function blankCharacter(){
   return {
     id: uid(),
     name:'', reading:'',
-    motif:'', themeSongTitle:'', themeSongUrl:'', themeColorText:'', themeColorHex:'',
+    emoji:'', motif:'', themeSongTitle:'', themeSongUrl:'', themeColorText:'', themeColorHex:'',
     profileImage:'', triImages:['','',''],
     basicInfo: DEFAULT_BASIC_FIELDS.map(([k,l])=>({id:k,label:l,value:'',custom:false})),
     subSections: {
@@ -1664,6 +1920,7 @@ function openEditor(id){
   document.getElementById('f-name').value = editingChar.name || '';
   document.getElementById('f-reading').value = editingChar.reading || '';
 
+  document.getElementById('f-emoji').value = editingChar.emoji || '';
   document.getElementById('f-motif').value = editingChar.motif || '';
   document.getElementById('f-song-title').value = editingChar.themeSongTitle || '';
   document.getElementById('f-song-url').value = editingChar.themeSongUrl || '';
@@ -2040,6 +2297,7 @@ function saveCharacter(showToast){
   editingChar.name = document.getElementById('f-name').value.trim();
   editingChar.reading = document.getElementById('f-reading').value.trim();
 
+  editingChar.emoji = document.getElementById('f-emoji').value.trim();
   editingChar.motif = document.getElementById('f-motif').value.trim();
   editingChar.themeSongTitle = document.getElementById('f-song-title').value.trim();
   editingChar.themeSongUrl = document.getElementById('f-song-url').value.trim();
@@ -2158,10 +2416,11 @@ diagWrap.addEventListener('mousedown', (e)=>{
   diagWrap.classList.add('panning');
 });
 window.addEventListener('mousemove', (e)=>{
-  if(!isPanning) return;
-  panX = e.clientX - panStartX;
-  panY = e.clientY - panStartY;
-  updateCanvasTransform();
+  if(!isExpPanning && isPanning){
+    panX = e.clientX - panStartX;
+    panY = e.clientY - panStartY;
+    updateCanvasTransform();
+  }
 });
 window.addEventListener('mouseup', ()=>{
   if(isPanning){
@@ -2578,7 +2837,7 @@ window.addEventListener('touchend', ()=>{
 });
 
 /* =========================================================
-   CENSOR ENGINE（墨消し記号█専用）
+   CENSOR ENGINE
    ========================================================= */
 function addSelectionToCensor(){
   const sel = window.getSelection().toString().trim();
@@ -2640,7 +2899,7 @@ function applyCensorPhraseToTree(rootEl, phrase){
   let n;
   while((n = walker.nextNode())){
     const p = n.parentElement;
-    if(p && (p.tagName === 'SCRIPT' || p.tagName === 'STYLE' || p.classList.contains('censor-item'))){
+    if(p && (p.tagName === 'SCRIPT' || p.tagName === 'STYLE' || p.classList.contains('censor-item'))) {
       continue;
     }
     nodes.push({
@@ -2880,9 +3139,12 @@ function renderExportSheet(){
     </div>`;
   headerHtml += `<div class="esheet-head-flex"><div class="esheet-head-text">`;
   if(c.reading) headerHtml += `<div class="esheet-reading" style="color:${accent2};">${escapeHtml(c.reading)}</div>`;
+  
+  // キャラクター名
   headerHtml += `<div class="esheet-name">${escapeHtml(c.name||'(NAMELESS)')}</div>`;
   headerHtml += `<div class="esheet-sub">CONFIDENTIAL CHARACTER DOSSIER RECORD</div>`;
 
+  // シンボル行（以前のシンプルデザイン・固定サイズ）
   let symHtml = '';
   if(c.motif){
     symHtml += `<div class="esheet-sym-row">
@@ -2897,9 +3159,6 @@ function renderExportSheet(){
     const title = c.themeSongTitle ? escapeHtml(c.themeSongTitle) : url;
     if(url){
       songVal = `<a href="${url}" target="_blank" rel="noopener noreferrer" style="text-decoration:underline;color:inherit;cursor:pointer;">${title}</a>`;
-      if(c.themeSongTitle && c.themeSongUrl){
-        songVal += ` <span style="font-family:var(--font-mono);font-size:0.82em;opacity:0.7;">(<a href="${url}" target="_blank" rel="noopener noreferrer" style="text-decoration:underline;color:inherit;cursor:pointer;">${url}</a>)</span>`;
-      }
     } else {
       songVal = title;
     }
@@ -2912,16 +3171,24 @@ function renderExportSheet(){
   if(c.themeColorText || c.themeColorHex){
     const hex = c.themeColorHex;
     const text = c.themeColorText || hex;
-    const swatch = hex ? `<span class="esheet-color-swatch" style="background:${hex};"></span>` : '';
+    const dot = hex ? `<span style="color:${hex}; font-size:1.15em; line-height:1; vertical-align:baseline; margin-right:4px;">●</span>` : '';
     symHtml += `<div class="esheet-sym-row">
       <span class="esheet-sym-star">✦</span>
       <span class="esheet-sym-label">COLOR:</span>
-      <span class="esheet-sym-val">${swatch}${escapeHtml(text)}</span>
+      <span class="esheet-sym-val">${dot}<span>${escapeHtml(text)}</span></span>
     </div>`;
   }
   if(symHtml){
     headerHtml += `<div class="esheet-symbols">${symHtml}</div>`;
   }
+
+  // 下部グラデーション線直上に沿うキャラ絵文字プレート（テーマカラー2に対応）
+  if(c.emoji){
+    headerHtml += `<div class="esheet-emoji-bottom-wrap">
+      <span class="esheet-char-emoji-badge" title="Character Emoji" style="border-left-color:${accent2} !important;">${escapeHtml(c.emoji)}</span>
+    </div>`;
+  }
+
   headerHtml += `</div>`;
 
   if(c.profileImage) headerHtml += `<img class="esheet-photo" style="width:${photoSize};" src="${c.profileImage}">`;
@@ -3263,6 +3530,9 @@ function renderExportSheet(){
       applyCensorPhraseToTree(sheet, phrase);
     });
   }
+
+  // ZWJ結合絵文字の分解防止
+  replaceCompoundEmojisWithImages(sheet);
 }
 
 /* ---------- エクスポート実行 ---------- */
@@ -3291,7 +3561,6 @@ async function captureExportCanvas(sheet, stage){
 
   const oldTransform = beginExportCapture(sheet, stage);
 
-  // PDF出力用リンク座標を取得
   const sheetRect = sheet.getBoundingClientRect();
   capturedPdfLinks = Array.from(sheet.querySelectorAll('a[href]')).map(a => {
     const rect = a.getBoundingClientRect();
